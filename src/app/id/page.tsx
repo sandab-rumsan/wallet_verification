@@ -1,27 +1,22 @@
 "use client";
 
 import ConnectWallet from "@/components/wallet/connect-wallet";
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
-export default function Home({ params: { id } }) {
+export default function Home() {
+  const params = useSearchParams();
+  const encryptedData = params.get("encrypted");
   const [start, setStart] = useState<boolean>(false);
   const [end, setEnd] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState("");
-  const [walletAddress, setWalletAddress] = useState("");
+  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [walletAddress, setWalletAddress] = useState<string>("");
 
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
-  };
-
-  const onStartClick = () => {
-    setStart(!start);
-  };
-
-  const onEndClick = () => {
-    setEnd(!end);
   };
 
   const handleWalletAddressChange = (event: any) => {
@@ -29,7 +24,7 @@ export default function Home({ params: { id } }) {
   };
 
   const handleVerifyClick = () => {
-    const payload = { walletAddress, id };
+    const payload = { walletAddress, encryptedData };
 
     fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/beneficiaries/validate-wallet`, {
       method: "POST",
@@ -38,11 +33,21 @@ export default function Home({ params: { id } }) {
       },
       body: JSON.stringify(payload),
     })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
       .then((data) => {
-        console.log("Success:", data);
+        toast.success("Wallet Address Verified Successfully");
+        console.log(data);
+        alert("Wallet Address Verified Successfully");
       })
       .catch((error) => {
         console.error("Error:", error);
+        alert("Wallet Address Verification Failed");
+        toast.error("Wallet Address Verification Failed");
       });
   };
 
