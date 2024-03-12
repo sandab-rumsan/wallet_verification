@@ -2,6 +2,7 @@
 
 import { ConnectKitButton } from "connectkit";
 import { Account } from "./account";
+import { FaWallet } from "react-icons/fa6";
 
 function ConnectWallet() {
   return (
@@ -11,7 +12,11 @@ function ConnectWallet() {
           if (isConnected) {
             return <Account />;
           }
-          return <button onClick={show}>Connect Wallet</button>;
+
+          return <button onClick={show} style={{ display: 'flex', alignItems: 'center' }}>
+            <FaWallet style={{ marginRight: '8px' }} />
+            Connect Wallet
+          </button>
         }}
       </ConnectKitButton.Custom>
     </div>
