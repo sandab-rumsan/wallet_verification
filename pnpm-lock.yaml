@@ -23,9 +23,9 @@ dependencies:
   react-icons:
     specifier: ^5.0.1
     version: 5.0.1(react@18.2.0)
-  react-toastify:
-    specifier: 8.0.1
-    version: 8.0.1(react-dom@18.2.0)(react@18.2.0)
+  sweetalert2:
+    specifier: ^11.10.6
+    version: 11.10.6
   wagmi:
     specifier: ^2.5.7
     version: 2.5.7(@tanstack/react-query@5.27.1)(@types/react@18.2.65)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(typescript@5.4.2)(viem@2.8.4)
@@ -8063,17 +8063,6 @@ packages:
       react-is: 18.2.0
     dev: false
 
-  /react-toastify@8.0.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-hHf4sJo9D+SKPcNM5iiri1UDXjZkDvflMGCPNnfm4fjUEC3rH4tRqOQB5IXjroEtArRRf3f26nTsKdficEBBIg==}
-    peerDependencies:
-      react: '>=16'
-      react-dom: '>=16'
-    dependencies:
-      clsx: 1.2.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
   /react-transition-state@1.1.5(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-ITY2mZqc2dWG2eitJkYNdcSFW8aKeOlkL2A/vowRrLL8GH3J6Re/SpD/BLvQzrVOTqjsP0b5S9N10vgNNzwMUQ==}
     peerDependencies:
@@ -8877,6 +8866,10 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  /sweetalert2@11.10.6:
+    resolution: {integrity: sha512-CINZPLZXZRSZqSOE7H7j1F7X8e8O1kLOiXPmtJn1DYxvXsKBr3d16d90+IcwTTs7dJww20h8r8QIxIwsLGX+6A==}
+    dev: false
 
   /system-architecture@0.1.0:
     resolution: {integrity: sha512-ulAk51I9UVUyJgxlv9M6lFot2WP3e7t8Kz9+IS6D4rVba1tR9kON+Ey69f+1R4Q8cd45Lod6a4IcJIxnzGc/zA==}

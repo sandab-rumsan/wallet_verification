@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 import { useSignMessage, useAccount } from "wagmi";
 
 export default function Home() {
@@ -16,6 +16,10 @@ export default function Home() {
   const { isConnected } = useAccount();
   const { data: signMessageData, signMessage } = useSignMessage();
 
+  const resetState = () => {
+    setSelectedOption("");
+    setWalletAddress("");
+  };
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
   };
@@ -41,14 +45,19 @@ export default function Home() {
         return response.json();
       })
       .then((data) => {
-        toast.success("Wallet Address Verified Successfully");
+        Swal.fire({
+          title: "Wallet Address Verified Successfully",
+          icon: "success",
+        });
         console.log(data);
-        alert("Wallet Address Verified Successfully");
+        resetState();
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("Wallet Address Verification Failed");
-        toast.error("Wallet Address Verification Failed");
+        Swal.fire({
+          title: "Wallet Address Verification Failed",
+          icon: "error",
+        });
       });
   };
 
@@ -72,24 +81,27 @@ export default function Home() {
         return response.json();
       })
       .then((data) => {
-        toast.success("Signature Signed Successfully");
+        Swal.fire({
+          title: "Signature Signed Successfully",
+          icon: "success",
+        });
         console.log(data);
-        alert("Signature Signed Successfully");
+        resetState();
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("Sign Signature Failed");
-        toast.error("Sign Signature Failed");
+        Swal.fire({
+          title: "Signature Signed Failed",
+          icon: "error",
+        });
       });
   };
 
   const handleSignMessage = () => {
     if (!isConnected) {
-      alert("Please connect your wallet");
       return;
     }
     if (!encryptedData) {
-      alert("Encrypted data not found");
       return;
     }
     signMessage({ message: encryptedData });
