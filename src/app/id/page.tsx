@@ -16,6 +16,10 @@ export default function Home() {
   const { isConnected } = useAccount();
   const { data: signMessageData, signMessage } = useSignMessage();
 
+  const resetState = () => {
+    setSelectedOption("");
+    setWalletAddress("");
+  }
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
   };
@@ -44,6 +48,8 @@ export default function Home() {
         toast.success("Wallet Address Verified Successfully");
         console.log(data);
         alert("Wallet Address Verified Successfully");
+        resetState();
+
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -74,7 +80,8 @@ export default function Home() {
       .then((data) => {
         toast.success("Signature Signed Successfully");
         console.log(data);
-        alert("Signature Signed Successfully");
+        alert("Wallet Verified Successfully");
+        resetState();
       })
       .catch((error) => {
         console.error("Error:", error);
