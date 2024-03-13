@@ -6,14 +6,18 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useSignMessage, useAccount } from 'wagmi'
+
+
 
 export default function Home() {
   const params = useSearchParams();
   const encryptedData = params.get("encrypted");
-  const [start, setStart] = useState<boolean>(false);
-  const [end, setEnd] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [walletAddress, setWalletAddress] = useState<string>("");
+  const { isConnected } = useAccount()
+  const { data: signMessageData, signMessage } = useSignMessage()
+
 
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
@@ -51,6 +55,24 @@ export default function Home() {
       });
   };
 
+  const handleSubmitSignature = async () => {
+    //Verify Signature
+    const payload = { signature: signMessageData, encryptedData };
+    console.log(payload);
+  }
+
+  const handleSignMessage = () => {
+    if (!isConnected) {
+      alert('Please connect your wallet')
+      return;
+    }
+    if (!encryptedData) {
+      alert('Encrypted data not found')
+      return;
+    }
+    signMessage({ message: encryptedData })
+  }
+
   return (
     <main className="min-h-screen min-w-screen">
       <header className="bg-black py-8 shadow-md w-full">
@@ -87,23 +109,6 @@ export default function Home() {
             cryptocurrencies and a seamless, transparent verification process,
             Wallet Verification ensures the control over your digital assets.
           </p>
-          {/* <div className="flex justify-center gap-4 mt-10">
-            <button
-              className={`p-2  w-24 rounded ${start ? "bg-green-500" : "bg-slate-500"
-                }`}
-              onClick={onStartClick}
-            >
-              Start
-            </button>
-            <button
-              className={`p-2 w-24 rounded ${end ? "bg-red-500" : "bg-slate-500"
-                }`}
-              onClick={onEndClick}
-            >
-              End
-            </button>
-          </div> */}
-
           <div className="flex justify-center gap-4 mt-10">
             <select
               value={selectedOption}
@@ -111,32 +116,61 @@ export default function Home() {
               className="p-2 w-64 rounded bg-slate-500 text-center"
             >
               <option value="">Select Option</option>
-              <option value="verify">Wallet Address</option>
-              <option value="end">Sign Message</option>
+              <option value="walletAddress">Wallet Address</option>
+              <option value="signMessage">Sign Message</option>
             </select>
           </div>
-          {selectedOption === "verify" && (
-            <div className="flex flex-col items-center mt-4">
+          {selectedOption === "walletAddress" && (
+            <div className="flex flex-col items-center mt-8">
               {/* Input field for wallet address */}
               <input
                 type="text"
                 value={walletAddress}
                 onChange={handleWalletAddressChange}
                 placeholder="Enter Wallet Address"
-                className="p-2 mt-2 w-64 rounded border border-gray-400 text-black"
+                className="p-2 mt-2 w-96 rounded border border-gray-400 text-black"
               />
               {/* Verify Wallet Address button */}
               <button
                 onClick={handleVerifyClick}
-                className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Verify Wallet Address
+                Submit
+              </button>
+            </div>
+          )}
+          {selectedOption === "signMessage" && (
+            <div className="flex flex-col items-center mt-8">
+              {/* Input field for wallet address */}
+              <textarea
+                value={`Sign this message using your wallet and submit the signed message to verify your wallet address:
+                ${encryptedData}`}
+                readOnly
+                className="p-2 mt-2 w-96 h-40 rounded border border-gray-400 text-black">
+
+              </textarea>
+
+              {signMessageData && (
+                <>
+                  <p className="mt-6 text-center font-semibold">Signature: </p><textarea
+                    value={signMessageData || ''}
+                    readOnly
+                    className="p-2 mt-2 w-96 h-40 rounded border border-gray-400 text-black">
+                  </textarea></>
+              )}
+              {/* Verify Wallet Address button */}
+              <button
+                // onClick={signMessageData ? signMessage(message: encryptedData || '') : handleSignMessage}
+                onClick={signMessageData == undefined ? handleSignMessage : handleSubmitSignature}
+                className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                {signMessageData == undefined ? `Sign Message` : 'Submit Signature'}
               </button>
             </div>
           )}
         </div>
       </div>
       <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]"></div>
-    </main>
+    </main >
   );
 }
